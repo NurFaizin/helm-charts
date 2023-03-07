@@ -1,0 +1,604 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "n8n": {
+            "type": "object",
+            "title": "N8N Basic Configuration",
+            "form": true,
+            "properties": {
+                "base_url": {
+                    "type": "string",
+                    "title": "Base URL",
+                    "description": "This base URL will be used as editor and webhook base url.",
+                    "form": true
+                },
+                "encryption_key": {
+                    "type": "string",
+                    "title": "Encription Key",
+                    "description": "That key is used to encrypt the credentials before they get saved to the database.",
+                    "form": true
+                }
+            }
+        },
+        "configEnv": {
+            "type": "object",
+            "title": "N8N Environment Variables",
+            "description": "N8N configurations using environment variables. See the ref: https://docs.n8n.io/hosting/environment-variables/environment-variables/",
+            "form": true,
+            "render": "textArea"
+        },
+        "persistence": {
+            "type": "object",
+            "title": "Persistent Volume Storage",
+            "form": true,
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "title": "Enable Persistent Volume",
+                    "description": "Enable persistent volume for N8N application.",
+                    "form": true
+                },
+                "size": {
+                    "type": "string",
+                    "title": "Persistent Volume Size",
+                    "form": true,
+                    "render": "slider",
+                    "sliderMin": 1,
+                    "sliderMax": 100,
+                    "sliderUnit": "Gi",
+                    "hidden": {
+                        "path": "persistence/enabled",
+                        "value": "false"
+                    }
+                }
+            }
+        },
+        "ingress": {
+            "type": "object",
+            "form": true,
+            "title": "Ingress Configuration",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "form": true,
+                    "title": "Enable Public URL",
+                    "description": "Enable the ingress resource that allows you to access the n8n editor and webhook."
+                },
+                "className": {
+                    "type": "string",
+                    "title": "Ingress Controller",
+                    "description": "Ingress controller provider e.g. nginx or traefik",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "ingress/enabled"
+                    }
+                },
+                "tls": {
+                    "type": "object",
+                    "form": true,
+                    "title": "TLS Configuration",
+                    "hidden": {
+                        "value": "false",
+                        "path": "ingress/enabled"
+                    },
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "form": true,
+                            "title": "Create a TLS secret",
+                            "hidden": {
+                                "value": "false",
+                                "path": "ingress/enabled"
+                            }
+                        },
+                        "issuer": {
+                            "type": "string",
+                            "form": true,
+                            "title": "Cluster-issuer name",
+                            "description": "Cert-manager SSL cluster-isuer name",
+                            "hidden": {
+                                "value": "false",
+                                "path": "ingress/tls/enabled"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "mariadb": {
+            "type": "object",
+            "title": "MariaDB Details",
+            "form": true,
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "title": "Use a new MariaDB database hosted in the cluster",
+                    "form": true,
+                    "description": "Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database switch this off and configure the external database details"
+                },
+                "auth": {
+                    "type": "object",
+                    "title": "Database Authentication",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "mariadb/enabled"
+                    },
+                    "properties": {
+                        "rootPassword": {
+                            "type": "string",
+                            "title": "Root Password",
+                            "description": "Password for the root user.",
+                            "form": true,
+                            "hidden": {
+                                "value": "false",
+                                "path": "mariadb/enabled"
+                            }
+                        },
+                        "username": {
+                            "type": "string",
+                            "title": "Database Username",
+                            "description": "Name for a custom user to create.",
+                            "form": true,
+                            "hidden": {
+                                "value": "false",
+                                "path": "mariadb/enabled"
+                            }
+                        },
+                        "password": {
+                            "type": "string",
+                            "title": "Database Password",
+                            "description": "Password for the new user.",
+                            "form": true,
+                            "hidden": {
+                                "value": "false",
+                                "path": "mariadb/enabled"
+                            }
+                        },
+                        "database": {
+                            "type": "string",
+                            "title": "Database Name",
+                            "description": "Name for a custom database to create.",
+                            "form": true,
+                            "hidden": {
+                                "value": "false",
+                                "path": "mariadb/enabled"
+                            }
+                        }
+                    }
+                },
+                "primary": {
+                    "type": "object",
+                    "hidden": {
+                        "value": "false",
+                        "path": "mariadb/enabled"
+                    },
+                    "properties": {
+                        "persistence": {
+                            "type": "object",
+                            "properties": {
+                                "size": {
+                                    "type": "string",
+                                    "title": "Volume Size",
+                                    "form": true,
+                                    "hidden": {
+                                        "value": "false",
+                                        "path": "mariadb/enabled"
+                                    },
+                                    "render": "slider",
+                                    "sliderMin": 1,
+                                    "sliderMax": 100,
+                                    "sliderUnit": "Gi"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "externalDatabase": {
+            "type": "object",
+            "title": "External Database Details",
+            "description": "If MariaDB is disabled. Use this section to specify the external database details",
+            "form": true,
+            "hidden": {
+                "value": "true",
+                "path": "mariadb/enabled"
+            },
+            "properties": {
+                "host": {
+                    "type": "string",
+                    "form": true,
+                    "title": "Database Host",
+                    "hidden": {
+                        "value": "true",
+                        "path": "mariadb/enabled"
+                    }
+                },
+                "user": {
+                    "type": "string",
+                    "form": true,
+                    "title": "Database Username",
+                    "hidden": {
+                        "value": "true",
+                        "path": "mariadb/enabled"
+                    }
+                },
+                "password": {
+                    "type": "string",
+                    "form": true,
+                    "title": "Database Password",
+                    "hidden": {
+                        "value": "true",
+                        "path": "mariadb/enabled"
+                    }
+                },
+                "database": {
+                    "type": "string",
+                    "form": true,
+                    "title": "Database Name",
+                    "hidden": {
+                        "value": "true",
+                        "path": "mariadb/enabled"
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "form": true,
+                    "title": "Database Port",
+                    "hidden": {
+                        "value": "true",
+                        "path": "mariadb/enabled"
+                    }
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "form": true,
+                    "title": "MariaDB Existing Secret",
+                    "hidden": {
+                        "value": "true",
+                        "path": "mariadb/enabled"
+                    }
+                }
+            }
+        },
+        "resources": {
+            "type": "object",
+            "title": "Required Resources",
+            "description": "Configure resource requests",
+            "form": true,
+            "properties": {
+                "requests": {
+                    "type": "object",
+                    "properties": {
+                        "memory": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "Memory Request",
+                            "sliderMin": 10,
+                            "sliderMax": 2048,
+                            "sliderUnit": "Mi"
+                        },
+                        "cpu": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "CPU Request",
+                            "sliderMin": 10,
+                            "sliderMax": 2000,
+                            "sliderUnit": "m"
+                        }
+                    }
+                }
+            }
+        },
+        "workerResources": {
+            "type": "object",
+            "title": "Required Resources",
+            "description": "Configure resource requests",
+            "form": true,
+            "properties": {
+                "requests": {
+                    "type": "object",
+                    "properties": {
+                        "memory": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "Memory Request",
+                            "sliderMin": 10,
+                            "sliderMax": 2048,
+                            "sliderUnit": "Mi"
+                        },
+                        "cpu": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "CPU Request",
+                            "sliderMin": 10,
+                            "sliderMax": 2000,
+                            "sliderUnit": "m"
+                        }
+                    }
+                }
+            }
+        },
+        "webhookResources": {
+            "type": "object",
+            "title": "Required Resources",
+            "description": "Configure resource requests",
+            "form": true,
+            "properties": {
+                "requests": {
+                    "type": "object",
+                    "properties": {
+                        "memory": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "Memory Request",
+                            "sliderMin": 10,
+                            "sliderMax": 2048,
+                            "sliderUnit": "Mi"
+                        },
+                        "cpu": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "CPU Request",
+                            "sliderMin": 10,
+                            "sliderMax": 2000,
+                            "sliderUnit": "m"
+                        }
+                    }
+                }
+            }
+        },
+        "scaling": {
+            "title": "Scaling Configuration",
+            "type": "object",
+            "description": "Scaling configuration using queue mechanism. Read more: https://docs.n8n.io/hosting/scaling/",
+            "form": true,
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "title": "Enable Scaling",
+                    "description": "Enable scaling with queue mechanism.",
+                    "form": true
+                },
+                "healthcheck": {
+                    "type": "boolean",
+                    "title": "Queue Healthcheck",
+                    "description": "Whether to enable health checks of queue.",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "scaling/enabled"
+                    }
+                },
+                "worker": {
+                    "type": "object",
+                    "title": "Worker Scaling Configuration",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "scaling/enabled"
+                    },
+                    "properties": {
+                        "count": {
+                            "type": "integer",
+                            "title": "Number of Workers",
+                            "description": "Number of worker instances, this value will be ignored if autoscaling is enabled.",
+                            "form": true,
+                            "hidden": {
+                                "value": "false",
+                                "path": "scaling/enabled"
+                            }
+                        },
+                        "concurrency": {
+                            "type": "integer",
+                            "title": "Concurrency Number",
+                            "description": "The number of jobs a worker can run in parallel.",
+                            "form": true,
+                            "hidden": {
+                                "value": "false",
+                                "path": "scaling/enabled"
+                            }
+                        }
+                    }
+                },
+                "webhook": {
+                    "type": "object",
+                    "title": "Webhook Scaling Configuration",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "scaling/enabled"
+                    },
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "title": "Enable Dedicated Webhook",
+                            "description": "Enable scaling of webhook instances.",
+                            "form": true
+                        },
+                        "count": {
+                            "type": "integer",
+                            "title": "Number of Webhooks",
+                            "description": "Number of webhook instances, this value will be ignored if autoscaling is enabled.",
+                            "form": true,
+                            "hidden": {
+                                "value": "false",
+                                "path": "scaling/webhook/enabled"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "autoscaling": {
+            "title": "Autoscaling Configuration",
+            "type": "object",
+            "form": true,
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "title": "Enable Autoscaling",
+                    "form": true
+                },
+                "minReplicas": {
+                    "type": "integer",
+                    "title": "Minimum Replica",
+                    "description": "Minimum replica number of worker/webhook instance, should be > 0.",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "autoscaling/enabled"
+                    }
+                },
+                "maxReplicas": {
+                    "type": "integer",
+                    "title": "Maximum Replica",
+                    "description": "Maximum replica number of worker/webhook instance.",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "autoscaling/enabled"
+                    }
+                },
+                "targetCPUUtilizationPercentage": {
+                    "type": "integer",
+                    "title": "Target CPU Utilization",
+                    "description": "The percentage number of target average CPU utilization.",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "autoscaling/enabled"
+                    }
+                },
+                "targetMemoryUtilizationPercentage": {
+                    "type": "integer",
+                    "title": "Target Memory Utilization",
+                    "description": "The percentage number of target average Memory utilization.",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "autoscaling/enabled"
+                    }
+                }
+            }
+        },
+        "redis": {
+            "type": "object",
+            "title": "Redis Details",
+            "form": true,
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "title": "Use a new Redis hosted in the cluster",
+                    "form": true,
+                    "description": "Whether to deploy a Redis server to satisfy the applications redis requirements. To use an external redis switch this off and configure the external redis details"
+                },
+                "auth": {
+                    "type": "object",
+                    "title": "Redis Authentication",
+                    "form": true,
+                    "hidden": {
+                        "value": "false",
+                        "path": "redis/enabled"
+                    },
+                    "properties": {
+                        "password": {
+                            "type": "string",
+                            "title": "Database Password",
+                            "description": "Password for the new user.",
+                            "form": true,
+                            "hidden": {
+                                "value": "false",
+                                "path": "redis/enabled"
+                            }
+                        }
+                    }
+                },
+                "master": {
+                    "type": "object",
+                    "hidden": {
+                        "value": "false",
+                        "path": "redis/enabled"
+                    },
+                    "properties": {
+                        "persistence": {
+                            "type": "object",
+                            "properties": {
+                                "size": {
+                                    "type": "string",
+                                    "title": "Volume Size",
+                                    "form": true,
+                                    "hidden": {
+                                        "value": "false",
+                                        "path": "redis/enabled"
+                                    },
+                                    "render": "slider",
+                                    "sliderMin": 1,
+                                    "sliderMax": 100,
+                                    "sliderUnit": "Gi"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "externalRedis": {
+            "type": "object",
+            "title": "External Redis Details",
+            "description": "If Redis is disabled. Use this section to specify the external Redis details",
+            "form": true,
+            "hidden": {
+                "value": "true",
+                "path": "redis/enabled"
+            },
+            "properties": {
+                "host": {
+                    "type": "string",
+                    "form": true,
+                    "title": "Redis Host",
+                    "hidden": {
+                        "value": "true",
+                        "path": "redis/enabled"
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "form": true,
+                    "title": "Database Port",
+                    "hidden": {
+                        "value": "true",
+                        "path": "redis/enabled"
+                    }
+                },
+                "password": {
+                    "type": "string",
+                    "form": true,
+                    "title": "Redis Password",
+                    "hidden": {
+                        "value": "true",
+                        "path": "redis/enabled"
+                    }
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "form": true,
+                    "title": "Redis Existing Secret",
+                    "hidden": {
+                        "value": "true",
+                        "path": "redis/enabled"
+                    }
+                }
+            }
+        }
+    }
+}
