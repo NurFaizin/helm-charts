@@ -22,7 +22,7 @@
             }
         },
         "configEnv": {
-            "type": "object",
+            "type": "string",
             "title": "N8N Environment Variables",
             "description": "N8N configurations using environment variables. See the ref: https://docs.n8n.io/hosting/environment-variables/environment-variables/",
             "form": true,
@@ -49,7 +49,7 @@
                     "sliderUnit": "Gi",
                     "hidden": {
                         "path": "persistence/enabled",
-                        "value": "false"
+                        "value": false
                     }
                 }
             }
@@ -71,7 +71,7 @@
                     "description": "Ingress controller provider e.g. nginx or traefik",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "ingress/enabled"
                     }
                 },
@@ -80,7 +80,7 @@
                     "form": true,
                     "title": "TLS Configuration",
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "ingress/enabled"
                     },
                     "properties": {
@@ -89,7 +89,7 @@
                             "form": true,
                             "title": "Create a TLS secret",
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "ingress/enabled"
                             }
                         },
@@ -99,7 +99,7 @@
                             "title": "Cluster-issuer name",
                             "description": "Cert-manager SSL cluster-isuer name",
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "ingress/tls/enabled"
                             }
                         }
@@ -123,7 +123,7 @@
                     "title": "Database Authentication",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "mariadb/enabled"
                     },
                     "properties": {
@@ -133,7 +133,7 @@
                             "description": "Password for the root user.",
                             "form": true,
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "mariadb/enabled"
                             }
                         },
@@ -143,7 +143,7 @@
                             "description": "Name for a custom user to create.",
                             "form": true,
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "mariadb/enabled"
                             }
                         },
@@ -153,7 +153,7 @@
                             "description": "Password for the new user.",
                             "form": true,
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "mariadb/enabled"
                             }
                         },
@@ -163,7 +163,7 @@
                             "description": "Name for a custom database to create.",
                             "form": true,
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "mariadb/enabled"
                             }
                         }
@@ -172,7 +172,7 @@
                 "primary": {
                     "type": "object",
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "mariadb/enabled"
                     },
                     "properties": {
@@ -184,7 +184,7 @@
                                     "title": "Volume Size",
                                     "form": true,
                                     "hidden": {
-                                        "value": "false",
+                                        "value": false,
                                         "path": "mariadb/enabled"
                                     },
                                     "render": "slider",
@@ -203,17 +203,13 @@
             "title": "External Database Details",
             "description": "If MariaDB is disabled. Use this section to specify the external database details",
             "form": true,
-            "hidden": {
-                "value": "true",
-                "path": "mariadb/enabled"
-            },
             "properties": {
                 "host": {
                     "type": "string",
                     "form": true,
                     "title": "Database Host",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "mariadb/enabled"
                     }
                 },
@@ -222,7 +218,7 @@
                     "form": true,
                     "title": "Database Username",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "mariadb/enabled"
                     }
                 },
@@ -231,7 +227,7 @@
                     "form": true,
                     "title": "Database Password",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "mariadb/enabled"
                     }
                 },
@@ -240,7 +236,7 @@
                     "form": true,
                     "title": "Database Name",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "mariadb/enabled"
                     }
                 },
@@ -249,7 +245,7 @@
                     "form": true,
                     "title": "Database Port",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "mariadb/enabled"
                     }
                 },
@@ -258,7 +254,7 @@
                     "form": true,
                     "title": "MariaDB Existing Secret",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "mariadb/enabled"
                     }
                 }
@@ -266,8 +262,8 @@
         },
         "resources": {
             "type": "object",
-            "title": "Required Resources",
-            "description": "Configure resource requests",
+            "title": "Main Resource",
+            "description": "Configure resource size for the main n8n apps.",
             "form": true,
             "properties": {
                 "requests": {
@@ -297,8 +293,8 @@
         },
         "workerResources": {
             "type": "object",
-            "title": "Required Resources",
-            "description": "Configure resource requests",
+            "title": "Worker Resources",
+            "description": "Configure resource size for the worker instance. (only active if the scaling mode is enabled)",
             "form": true,
             "properties": {
                 "requests": {
@@ -328,8 +324,8 @@
         },
         "webhookResources": {
             "type": "object",
-            "title": "Required Resources",
-            "description": "Configure resource requests",
+            "title": "Webhook Resources",
+            "description": "Configure resource size for the webhook instance. (only active if the scaling mode is enabled)",
             "form": true,
             "properties": {
                 "requests": {
@@ -375,7 +371,7 @@
                     "description": "Whether to enable health checks of queue.",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "scaling/enabled"
                     }
                 },
@@ -384,7 +380,7 @@
                     "title": "Worker Scaling Configuration",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "scaling/enabled"
                     },
                     "properties": {
@@ -394,7 +390,7 @@
                             "description": "Number of worker instances, this value will be ignored if autoscaling is enabled.",
                             "form": true,
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "scaling/enabled"
                             }
                         },
@@ -404,7 +400,7 @@
                             "description": "The number of jobs a worker can run in parallel.",
                             "form": true,
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "scaling/enabled"
                             }
                         }
@@ -415,7 +411,7 @@
                     "title": "Webhook Scaling Configuration",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "scaling/enabled"
                     },
                     "properties": {
@@ -431,7 +427,7 @@
                             "description": "Number of webhook instances, this value will be ignored if autoscaling is enabled.",
                             "form": true,
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "scaling/webhook/enabled"
                             }
                         }
@@ -441,6 +437,7 @@
         },
         "autoscaling": {
             "title": "Autoscaling Configuration",
+            "description": "Scaling configuration using Horizontal Pod Autoscaler mechanism. Read more: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/",
             "type": "object",
             "form": true,
             "properties": {
@@ -455,7 +452,7 @@
                     "description": "Minimum replica number of worker/webhook instance, should be > 0.",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "autoscaling/enabled"
                     }
                 },
@@ -465,7 +462,7 @@
                     "description": "Maximum replica number of worker/webhook instance.",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "autoscaling/enabled"
                     }
                 },
@@ -475,7 +472,7 @@
                     "description": "The percentage number of target average CPU utilization.",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "autoscaling/enabled"
                     }
                 },
@@ -485,7 +482,7 @@
                     "description": "The percentage number of target average Memory utilization.",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "autoscaling/enabled"
                     }
                 }
@@ -507,7 +504,7 @@
                     "title": "Redis Authentication",
                     "form": true,
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "redis/enabled"
                     },
                     "properties": {
@@ -517,7 +514,7 @@
                             "description": "Password for the new user.",
                             "form": true,
                             "hidden": {
-                                "value": "false",
+                                "value": false,
                                 "path": "redis/enabled"
                             }
                         }
@@ -526,7 +523,7 @@
                 "master": {
                     "type": "object",
                     "hidden": {
-                        "value": "false",
+                        "value": false,
                         "path": "redis/enabled"
                     },
                     "properties": {
@@ -538,7 +535,7 @@
                                     "title": "Volume Size",
                                     "form": true,
                                     "hidden": {
-                                        "value": "false",
+                                        "value": false,
                                         "path": "redis/enabled"
                                     },
                                     "render": "slider",
@@ -558,7 +555,7 @@
             "description": "If Redis is disabled. Use this section to specify the external Redis details",
             "form": true,
             "hidden": {
-                "value": "true",
+                "value": true,
                 "path": "redis/enabled"
             },
             "properties": {
@@ -567,7 +564,7 @@
                     "form": true,
                     "title": "Redis Host",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "redis/enabled"
                     }
                 },
@@ -576,7 +573,7 @@
                     "form": true,
                     "title": "Database Port",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "redis/enabled"
                     }
                 },
@@ -585,7 +582,7 @@
                     "form": true,
                     "title": "Redis Password",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "redis/enabled"
                     }
                 },
@@ -594,7 +591,7 @@
                     "form": true,
                     "title": "Redis Existing Secret",
                     "hidden": {
-                        "value": "true",
+                        "value": true,
                         "path": "redis/enabled"
                     }
                 }
