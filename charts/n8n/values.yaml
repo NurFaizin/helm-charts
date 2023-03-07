@@ -1,11 +1,27 @@
 # Default helm values for n8n.
 # Default values within the n8n application can be found under https://github.com/n8n-io/n8n/blob/master/packages/cli/config/index.ts
 n8n:
-  base_url:         # n8n public base url
-  encryption_key:   # n8n creates a random encryption key automatically on the first launch and saves it in the ~/.n8n folder. That key is used to encrypt the credentials before they get saved to the database.
-defaults:
+  encryption_key: hash-code  # n8n creates a random encryption key automatically on the first launch and saves it in the ~/.n8n folder. That key is used to encrypt the credentials before they get saved to the database.
 
-configEnv: {}
+smtp:
+  host:  # SMTP server host
+  port: 465 # SMTP server port  
+  ssl: true # Whether or not to use SSL for SMTP
+  user: # SMTP login username
+  pass:  # SMTP login password
+  sender:  # How to display sender name'
+
+executions:
+  timeout: -1  # Max run time (seconds) before stopping the workflow execution
+  timeoutMax: 3600  # Max execution time (seconds) that can be set for a workflow individually
+  saveDataOnError: all  # What workflow execution data to save on error
+  saveDataOnSuccess: none  # What workflow execution data to save on success
+  saveExecutionProgress: false  # Whether or not to save progress for each node executed
+  saveDataManualExecutions: false  # Save data of executions when started manually via editor
+  pruneData: false  # Delete data of past executions on a rolling basis
+  pruneDataMaxAge: 336  # How old (hours) the execution data has to be to get deleted
+  pruneDataTimeout: 3600  # Timeout (seconds) after execution data has been pruned
+  pruneDataMaxCount: 0  # Maximum number of executions to keep in DB. Default 0 = no limit
 
 config: {}
     
@@ -198,6 +214,7 @@ ingress:
   annotations: {}
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
+  hostname: yourdomain.here
   tls:
     enabled: false
     issuer: "letsencrypt-prod" # cert-manager cluster-issuer name
@@ -258,7 +275,7 @@ autoscaling:
 ## Bitnami Redis configuration
 ## https://github.com/bitnami/charts/tree/master/bitnami/redis
 redis:
-  enabled: true
+  enabled: false
   architecture: standalone
   auth:
     enabled: true
@@ -272,7 +289,7 @@ redis:
 
 externalRedis:
   host:
-  port:
+  port: 6379
   password:
   existingSecret:
 
@@ -329,7 +346,7 @@ externalDatabase:
   host:
   ## @param externalDatabase.port External Database server port
   ##
-  port:
+  port: 3306
   ## @param externalDatabase.user External Database username
   ##
   user:

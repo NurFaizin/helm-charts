@@ -28,11 +28,11 @@ spec:
   {{- if .Values.ingress.tls.enabled }}
   tls:
     - hosts:
-      - {{ include "n8n.baseurl" . | quote }}
+      - {{ .Values.ingress.hostname }}
       secretName: {{ $fullName }}-tls
   {{- end }}
   rules:
-    - host: {{ include "n8n.baseurl" . | quote }}
+    - host: {{ .Values.ingress.hostname }}
       http:
         paths:
           - path: /

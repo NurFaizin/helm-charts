@@ -27,8 +27,8 @@ If release name contains chart name it will be used as a full name.
 n8n base url
 */}}
 {{- define "n8n.baseurl" -}}
-{{- if and .Values.n8n.base_url .Values.ingress.enabled }}
-{{- .Values.n8n.base_url }}
+{{- if and .Values.ingress.enabled .Values.ingress.hostname }}
+{{- .Values.ingress.hostname }}
 {{- end }}
 {{- end }}
 
@@ -64,10 +64,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Pod environments
 */}}
 {{- define "n8n.deploymentPodEnvironments" -}}
-{{- range $key, $value := .Values.configEnv }}
-- name: {{ $key }}
-  value: {{ $value | quote}}
-{{ end }}
 {{- range $key, $value := .Values.extraEnv }}
 - name: {{ $key }}
   value: {{ $value | quote}}
@@ -82,6 +78,43 @@ Pod environments
 - name: "WEBHOOK_TUNNEL_URL"
   value: {{ include "n8n.baseurl" . | quote }}
 {{- end }}
+- name: EXECUTIONS_TIMEOUT
+  value: {{ .Values.executions.timeout | quote }}
+- name: EXECUTIONS_TIMEOUT_MAX
+  value: {{ .Values.executions.timeoutMax | quote }}
+- name: EXECUTIONS_DATA_SAVE_ON_ERROR
+  value: {{ .Values.executions.saveDataOnError | quote }}
+- name: EXECUTIONS_DATA_SAVE_ON_SUCCESS
+  value: {{ .Values.executions.saveDataOnSuccess | quote }}
+- name: EXECUTIONS_DATA_SAVE_ON_PROGRESS
+  value: {{ .Values.executions.saveExecutionProgress | quote }}
+- name: EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS
+  value: {{ .Values.executions.saveDataManualExecutions | quote }}
+- name: EXECUTIONS_DATA_PRUNE
+  value: {{ .Values.executions.pruneData | quote }}
+- name: EXECUTIONS_DATA_MAX_AGE
+  value: {{ .Values.executions.pruneDataMaxAge | quote }}
+- name: EXECUTIONS_DATA_PRUNE_TIMEOUT
+  value: {{ .Values.executions.pruneDataTimeout | quote }}
+- name: EXECUTIONS_DATA_PRUNE_MAX_COUNT
+  value: {{ .Values.executions.pruneDataMaxCount | quote }}
+- name: N8N_EMAIL_MODE
+  value: smtp
+- name: N8N_SMTP_HOST
+  value: {{ .Values.smtp.host | quote }}
+- name: N8N_SMTP_PORT
+  value: {{ .Values.smtp.port | quote }}
+- name: N8N_SMTP_SSL
+  value: {{ .Values.smtp.ssl | quote }}
+- name: N8N_SMTP_USER
+  value: {{ .Values.smtp.user | quote }}
+- name: N8N_SMTP_PASS
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "n8n.fullname" . }}-smtp
+      key: pass
+- name: N8N_SMTP_SENDER
+  value: {{ .Values.smtp.sender | quote }}
 - name: DB_TYPE
   value: mariadb
 - name: DB_MYSQLDB_HOST
