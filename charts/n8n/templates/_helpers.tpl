@@ -191,7 +191,7 @@ Create the name of the service account to use
 
 {{/* PVC existing, emptyDir, Dynamic */}}
 {{- define "n8n.pvc" -}}
-{{- if or (not .Values.persistence.enabled) -}}
+{{- if not .Values.persistence.enabled -}}
           emptyDir: {}
 {{- else if and .Values.persistence.enabled .Values.persistence.existingClaim -}}
           persistentVolumeClaim:
