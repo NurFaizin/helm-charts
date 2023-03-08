@@ -304,3 +304,46 @@ Get the Redis credentials secret.
     {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "n8n.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "n8n.validateValues.database" .) -}}
+{{- $messages := append $messages (include "n8n.validateValues.redis" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+
+{{/* Validate values of N8N - Database */}}
+{{- define "n8n.validateValues.database" -}}
+{{- if and (not .Values.mariadb.enabled) (or (empty .Values.externalDatabase.host) (empty .Values.externalDatabase.port) (empty .Values.externalDatabase.database)) -}}
+n8n: mariadb
+   You disable the MariaDB installation but you did not provide the required parameters
+   to use an external database. To use an external database, please ensure you provide
+   (at least) the following values:
+
+       externalDatabase.host=DB_SERVER_HOST
+       externalDatabase.database=DB_NAME
+       externalDatabase.port=DB_SERVER_PORT
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of N8N - Redis */}}
+{{- define "n8n.validateValues.redis" -}}
+{{- if and .Values.scaling.enabled (not .Values.redis.enabled) (or (empty .Values.externalRedis.host) (empty .Values.externalRedis.port)) -}}
+n8n: redis
+   You enabled scaling with queue mechanism but you did not enable the Redis
+   installation nor you did provided the required parameters to use an external redis server.
+   Please enable the Redis installation (--set redis.enabled=true) or
+   provide the external redis server values:
+
+       externalRedis.host=REDIS_SERVER_HOST
+       externalRedis.port=REDIS_SERVER_PORT
+{{- end -}}
+{{- end -}}

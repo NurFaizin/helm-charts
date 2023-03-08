@@ -8,7 +8,7 @@ smtp:
   port: 465 # SMTP server port  
   ssl: true # Whether or not to use SSL for SMTP
   user: # SMTP login username
-  pass:  # SMTP login password
+  pass: "" # SMTP login password
   sender:  # How to display sender name'
 
 executions:
@@ -279,7 +279,7 @@ redis:
   architecture: standalone
   auth:
     enabled: true
-    password:
+    password: ""
     existingSecret:
   master:
     persistence:
@@ -290,7 +290,7 @@ redis:
 externalRedis:
   host:
   port: 6379
-  password:
+  password: ""
   existingSecret:
 
 ## Bitnami MariaDB configuration
@@ -314,10 +314,10 @@ mariadb:
   ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
   ##
   auth:
-    rootPassword:
+    rootPassword: ""
     database: n8n
     username: n8n
-    password:
+    password: ""
     existingSecret:
   ## MariaDB Primary configuration
   ##
@@ -352,7 +352,7 @@ externalDatabase:
   user:
   ## @param externalDatabase.password External Database user password
   ##
-  password:
+  password: ""
   ## @param externalDatabase.database External Database database name
   ##
   database:
