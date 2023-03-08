@@ -112,7 +112,7 @@ Pod environments
   valueFrom:
     secretKeyRef:
       name: {{ include "n8n.fullname" . }}-smtp
-      key: pass
+      key: smtp-pass
 - name: N8N_SMTP_SENDER
   value: {{ .Values.smtp.sender | quote }}
 - name: DB_TYPE
