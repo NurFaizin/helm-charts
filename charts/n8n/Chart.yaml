@@ -1,3 +1,7 @@
+annotations:
+  category: Work Flow
+  licenses: Apache-2.0
+
 apiVersion: v2
 name: n8n
 version: 0.217.1-20230307
