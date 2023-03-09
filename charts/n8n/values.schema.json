@@ -648,16 +648,6 @@
                         "value": false,
                         "path": "autoscaling/enabled"
                     }
-                },
-                "targetMemoryUtilizationPercentage": {
-                    "type": "integer",
-                    "title": "Target Memory Utilization",
-                    "description": "The percentage number of target average Memory utilization.",
-                    "form": true,
-                    "hidden": {
-                        "value": false,
-                        "path": "autoscaling/enabled"
-                    }
                 }
             }
         }

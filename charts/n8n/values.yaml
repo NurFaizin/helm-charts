@@ -189,17 +189,17 @@ ingress:
 workerResources:
   requests:
     cpu: 100m
-    memory: 150Mi
+    memory: 128Mi
 
 webhookResources:
   requests:
     cpu: 100m
-    memory: 150Mi
+    memory: 128Mi
 
 resources:
   requests:
     cpu: 100m
-    memory: 256Mi
+    memory: 200Mi
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -234,7 +234,6 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
 
 ## Bitnami Redis configuration
 ## https://github.com/bitnami/charts/tree/master/bitnami/redis
