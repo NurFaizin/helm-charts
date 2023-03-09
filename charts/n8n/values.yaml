@@ -116,42 +116,6 @@ extraEnv: {}
 # Set this if running behind a reverse proxy and the external port is different from the port n8n runs on
 #   WEBHOOK_TUNNEL_URL: "https://n8n.myhost.com/
 
-##
-##
-##
-##
-## Common Kubernetes Config Settings
-persistence:
-  ## If true, use a Persistent Volume Claim, If false, use emptyDir
-  ##
-  enabled: true
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ## PVC annotations
-  #
-  # If you need this annotation include it under values.yml file and pvc.yml template will add it.
-  # This is not maintained at Helm v3 anymore.
-  # https://github.com/8gears/n8n-helm-chart/issues/8
-  #
-  # annotations:
-  #   helm.sh/resource-policy: keep
-  ## Persistent Volume Access Mode
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## Persistent Volume size
-  ##
-  size: 1Gi
-  ## Use an existing PVC
-  ##
-  existingClaim:
-
 replicaCount: 1
 
 deploymentStrategy:

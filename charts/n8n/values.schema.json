@@ -61,32 +61,6 @@
                 }
             }
         },
-        "persistence": {
-            "type": "object",
-            "title": "Persistent Volume Storage",
-            "form": true,
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "title": "Enable Persistent Volume",
-                    "description": "Enable persistent volume for N8N application.",
-                    "form": true
-                },
-                "size": {
-                    "type": "string",
-                    "title": "Persistent Volume Size",
-                    "form": true,
-                    "render": "slider",
-                    "sliderMin": 1,
-                    "sliderMax": 100,
-                    "sliderUnit": "Gi",
-                    "hidden": {
-                        "path": "persistence/enabled",
-                        "value": false
-                    }
-                }
-            }
-        },
         "executions": {
             "title": "Executions Configuration",
             "type": "object",

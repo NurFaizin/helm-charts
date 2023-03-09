@@ -61,8 +61,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: data
-              mountPath: /root/.n8n
             {{- if .Values.config }}
             - name: config-volume
               mountPath: /n8n-config
@@ -84,8 +82,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: "data"
-          {{ include "n8n.pvc" . }}
         {{- if .Values.config }}
         - name: config-volume
           configMap:

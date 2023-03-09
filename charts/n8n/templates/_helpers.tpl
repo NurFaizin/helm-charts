@@ -188,20 +188,6 @@ Create the name of the service account to use
     {{- print $conf_val $separator $sec_val }}
 {{- end }}
 
-
-{{/* PVC existing, emptyDir, Dynamic */}}
-{{- define "n8n.pvc" -}}
-{{- if not .Values.persistence.enabled -}}
-          emptyDir: {}
-{{- else if and .Values.persistence.enabled .Values.persistence.existingClaim -}}
-          persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim }}
-{{- else if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
-          persistentVolumeClaim:
-            claimName: {{ include "n8n.fullname" . }}
-{{- end }}
-{{- end }}
-
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
