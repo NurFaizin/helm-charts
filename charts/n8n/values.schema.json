@@ -2,6 +2,20 @@
     "$schema": "http://json-schema.org/schema#",
     "type": "object",
     "properties": {
+        "image": {
+            "type": "object",
+            "title": "Version",
+            "description": "Version of N8N, should be carefully select it to make sure the upgrade doesn't breaking anything.",
+            "form": true,
+            "properties": {
+                "tag": {
+                    "type": "string",
+                    "title": "Version Tag",
+                    "description": "Tag of the docker image version of N8N. Plese refer this page to get the desired tag https://hub.docker.com/r/n8nio/n8n ",
+                    "form": true
+                }
+            }
+        },
         "ingress": {
             "type": "object",
             "form": true,
