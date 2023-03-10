@@ -3,6 +3,9 @@
 n8n:
   encryption_key: hash-code  # n8n creates a random encryption key automatically on the first launch and saves it in the ~/.n8n folder. That key is used to encrypt the credentials before they get saved to the database.
 
+generic:
+  timezone: America/New_York  # The timezone to use. Is important for nodes like "Cron" which start the workflow automatically at a specified time. This setting can also be overwritten on a per workflow basis in the workflow settings in the editor.
+
 smtp:
   host:  # SMTP server host
   port: 465 # SMTP server port  

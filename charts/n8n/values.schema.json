@@ -75,6 +75,19 @@
                 }
             }
         },
+        "generic": {
+            "type": "object",
+            "title": "Generic Configuration",
+            "form": true,
+            "properties": {
+                "timezone": {
+                    "type": "string",
+                    "title": "Default Timezone",
+                    "description": "The timezone to use. Is important for nodes like 'Cron' which start the workflow automatically at a specified time. This setting can also be overwritten on a per workflow basis in the workflow settings in the editor.",
+                    "form": true
+                }
+            }
+        },
         "executions": {
             "title": "Executions Configuration",
             "type": "object",
