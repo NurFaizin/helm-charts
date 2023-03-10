@@ -28,7 +28,11 @@ n8n base url
 */}}
 {{- define "n8n.baseurl" -}}
 {{- if and .Values.ingress.enabled .Values.ingress.hostname }}
-{{- .Values.ingress.hostname }}
+{{- if .Values.ingress.tls.enabled }}
+{{- printf "https://%s" .Values.ingress.hostname }}
+{{- else }}
+{{- printf "http://%s" .Values.ingress.hostname }}
+{{- end }}
 {{- end }}
 {{- end }}
 
@@ -67,17 +71,23 @@ Pod environments
 {{- range $key, $value := .Values.extraEnv }}
 - name: {{ $key }}
   value: {{ $value | quote}}
-{{ end }}
-- name: "N8N_PORT" #! we better set the port once again as ENV Var, see: https://community.n8n.io/t/default-config-is-not-set-or-the-port-to-be-more-precise/3158/3?u=vad1mo
+{{- end }}
+- name: N8N_PORT #! we better set the port once again as ENV Var, see: https://community.n8n.io/t/default-config-is-not-set-or-the-port-to-be-more-precise/3158/3?u=vad1mo
   value: {{ get .Values.config "port" | default "5678" | quote }}
 {{- if (include "n8n.baseurl" .) }}
-- name: "N8N_EDITOR_BASE_URL"
+- name: N8N_EDITOR_BASE_URL
   value: {{ include "n8n.baseurl" . | quote }}
-- name: "WEBHOOK_URL"
+- name: WEBHOOK_URL
   value: {{ include "n8n.baseurl" . | quote }}
-- name: "WEBHOOK_TUNNEL_URL"
+- name: WEBHOOK_TUNNEL_URL
+  value: {{ include "n8n.baseurl" . | quote }}
+- name: VUE_APP_URL_BASE_API
   value: {{ include "n8n.baseurl" . | quote }}
 {{- end }}
+- name: GENERIC_TIMEZONE
+  value: {{ .Values.generic.timezone | quote }}
+- name: TZ
+  value: {{ .Values.generic.timezone | quote }}
 - name: EXECUTIONS_TIMEOUT
   value: {{ .Values.executions.timeout | quote }}
 - name: EXECUTIONS_TIMEOUT_MAX
@@ -138,7 +148,7 @@ Pod environments
 {{- if or .Values.config .Values.secret }}
 - name: "N8N_CONFIG_FILES"
   value: {{ include "n8n.configFiles" . | quote }}
-{{ end }}
+{{- end }}
 {{- if .Values.scaling.enabled }}
 - name: "EXECUTIONS_MODE"
   value: "queue"
@@ -153,11 +163,11 @@ Pod environments
       key: redis-password
 - name: "QUEUE_HEALTH_CHECK_ACTIVE"
   value: {{ .Values.scaling.healthcheck | quote }}
-{{ end }}
+{{- end }}
 {{- if .Values.scaling.webhook.enabled }}
 - name: "N8N_DISABLE_PRODUCTION_MAIN_PROCESS"
   value: "true"
-{{ end }}
+{{- end }}
 {{- end }}
 
 {{/*
