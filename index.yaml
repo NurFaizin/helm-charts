@@ -6,6 +6,47 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 0.218.0
+    created: "2023-03-10T02:31:24.720966485Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.2.0
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.5.1
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 2.x.x
+    description: A Kubernetes Helm chart for n8n a free and open fair-code licensed
+      node based Workflow Automation Tool. Easily automate tasks across different
+      services.
+    digest: b30a2140ded3bd61a890da42cfd781d6cc932f5b647d17c08e59842047c64e30
+    home: https://github.com/NurFaizin/helm-charts/n8n
+    icon: https://avatars1.githubusercontent.com/u/45487711?s=200&v=4
+    keywords:
+    - Workflow Automation
+    - Workflow
+    - iPaaS
+    - integration-framework
+    - low-code-plattform
+    - low-code
+    maintainers:
+    - name: Nur Faizin
+    name: n8n
+    sources:
+    - https://github.com/n8n-io/n8n
+    - https://n8n.io/
+    type: application
+    urls:
+    - https://github.com/NurFaizin/helm-charts/releases/download/n8n-0.218.0-20230310/n8n-0.218.0-20230310.tgz
+    version: 0.218.0-20230310
+  - annotations:
+      category: Work Flow
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 0.218.0
     created: "2023-03-09T05:07:16.115098615Z"
     dependencies:
     - condition: redis.enabled
@@ -83,4 +124,4 @@ entries:
     urls:
     - https://github.com/NurFaizin/helm-charts/releases/download/n8n-0.217.1-20230307/n8n-0.217.1-20230307.tgz
     version: 0.217.1-20230307
-generated: "2023-03-09T05:07:16.115115215Z"
+generated: "2023-03-10T02:31:24.720983485Z"
