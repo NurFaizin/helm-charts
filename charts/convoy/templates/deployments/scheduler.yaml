@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "convoy.fullname" . }}-scheduler
+  labels:
+    {{- include "convoy.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "convoy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "convoy.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "convoy.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: {{ include "convoy.fullname" . }}
+          configMap:
+            name: {{ include "convoy.fullname" . }}
+            items:
+            - key: convoy.json
+              path: convoy.json
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/cmd" ]
+          args: [ "scheduler", "--config", "convoy.json" ]
+          volumeMounts:
+          - name: {{ include "convoy.fullname" . }}
+            mountPath: /convoy.json
+            subPath: convoy.json
+          ports:
+            - name: http
+              containerPort: 5007
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+              - ls
+            initialDelaySeconds: 30
+          readinessProbe:
+            exec:
+              command:
+              - ls
+            initialDelaySeconds: 30
+          resources:
+            requests:
+            {{- toYaml .Values.resources.scheduler.requests | nindent 14 }}
+            limits:
+            {{- toYaml .Values.resources.scheduler.limits | nindent 14 }}
+          env:
+            {{- include "convoy.deploymentPodEnvironments" . | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
