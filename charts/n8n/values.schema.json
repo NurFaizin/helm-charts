@@ -75,6 +75,19 @@
                 }
             }
         },
+        "n8n": {
+            "type": "object",
+            "title": "N8N Default Configuration",
+            "form": true,
+            "properties": {
+                "encryption_key": {
+                    "type": "string",
+                    "title": "N8N Encryption Key",
+                    "description": "This key is used to encrypt the credentials before they get saved to the database. Do not change this value if you upgrade/migrate the deployment.",
+                    "form": true
+                }
+            }
+        },
         "generic": {
             "type": "object",
             "title": "Generic Configuration",

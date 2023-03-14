@@ -4,7 +4,7 @@ annotations:
 
 apiVersion: v2
 name: n8n
-version: 0.218.0-20230310
+version: 0.218.0-20230314
 appVersion: 0.218.0
 type: application
 
