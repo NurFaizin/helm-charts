@@ -34,6 +34,12 @@
           "title": "Use a custom hostname",
           "description": "Enable the ingress resource that allows you to access the WordPress installation."
         },
+        "ingressClassName": {
+          "type": "string",
+          "form": true,
+          "title": "Ingress Class Name",
+          "description": "IngressClass that will be be used to implement the Ingress. e.g nginx or traefik"
+        },
         "hostname": {
           "type": "string",
           "form": true,

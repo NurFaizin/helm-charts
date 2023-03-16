@@ -34,4 +34,4 @@ name: wordpress-scalable
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/wordpress
   - https://wordpress.org/
-version: 6.1.1-20230315
+version: 6.1.1-20230316
