@@ -171,6 +171,49 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 6.1.1
+    created: "2023-03-26T23:04:12.382704444Z"
+    dependencies:
+    - condition: memcached.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: WordPress is the world's most popular blogging and content management
+      platform. Powerful yet simple, everyone from students to global corporations
+      use it to build beautiful, functional websites.
+    digest: 9d193a3a4244a180d32d3293fa59a93d7916c270ab418925705dba8f572264a5
+    home: https://github.com/NurFaizin/helm-charts/wordpress
+    icon: https://s.w.org/style/images/about/WordPress-logotype-wmark.png
+    keywords:
+    - application
+    - blog
+    - cms
+    - http
+    - php
+    - web
+    - wordpress
+    maintainers:
+    - name: Nur Faizin
+    name: wordpress-scalable
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/wordpress
+    - https://wordpress.org/
+    urls:
+    - https://github.com/NurFaizin/helm-charts/releases/download/wordpress-scalable-6.1.1-20230327/wordpress-scalable-6.1.1-20230327.tgz
+    version: 6.1.1-20230327
+  - annotations:
+      category: CMS
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 6.1.1
     created: "2023-03-16T03:14:13.873945956Z"
     dependencies:
     - condition: memcached.enabled
@@ -252,4 +295,4 @@ entries:
     urls:
     - https://github.com/NurFaizin/helm-charts/releases/download/wordpress-scalable-6.1.1-20230315/wordpress-scalable-6.1.1-20230315.tgz
     version: 6.1.1-20230315
-generated: "2023-03-16T03:14:13.873970557Z"
+generated: "2023-03-26T23:04:12.382937647Z"
