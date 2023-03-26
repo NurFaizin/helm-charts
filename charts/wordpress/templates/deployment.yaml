@@ -329,6 +329,25 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
+        {{- if and .Values.persistence.enabled .Values.persistence.filebrowser.enabled }}
+        - name: filebrowser
+          image: filebrowser/filebrowser
+          ports:
+            - name: filebrowser
+              containerPort: {{ .Values.persistence.filebrowser.port }}
+          volumeMounts:
+            - name: wordpress-data
+              mountPath: /srv
+          resources:
+            requests:
+              cpu: 1m
+              memory: 10Mi
+          env:
+            - name: FB_BASEURL
+              value: {{ .Values.persistence.filebrowser.baseUrl | quote }}
+            - name: FB_PORT
+              value: {{ .Values.persistence.filebrowser.port | quote }}
+        {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}

@@ -35,6 +35,17 @@ spec:
             pathType: {{ .Values.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+          {{- if and .Values.persistence.enabled .Values.persistence.filebrowser.enabled }}
+          - path: {{ .Values.persistence.filebrowser.baseUrl }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: Prefix
+            {{- end }}
+            backend:
+              service:
+                name: {{ include "common.names.fullname" . }}-filebrowser
+                port:
+                  name: filebrowser
+          {{- end }}
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
     - host: {{ .name | quote }}

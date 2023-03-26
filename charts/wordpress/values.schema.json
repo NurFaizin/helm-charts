@@ -87,6 +87,16 @@
           "title": "Persistent Volume Class",
           "description": "If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner. Note: Please use storageClassName that support ReadWriteMany (RWX) access mode if you want to enable the autoscaling",
           "form": true
+        },
+        "filebrowser": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "title": "Enable filebrowser",
+              "form": true
+            }
+          }
         }
       }
     },

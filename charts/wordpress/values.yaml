@@ -740,6 +740,14 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
+  ## @param persistence.filebrowser.enabled Enable persitent volume filebrowser
+  ## @param persistence.filebrowser.baseUrl Filebrowser baseurl
+  ## @param persistence.filebrowser.port Filebrowser port to listen
+  ##
+  filebrowser:
+    enabled: false
+    baseUrl: /filebrowser
+    port: 8000
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
