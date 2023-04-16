@@ -185,6 +185,10 @@ Pod environments
 {{- end }}
 - name: CONVOY_ENV
   value: {{ .Values.convoy.env | quote }}
+{{- if .Values.ingress.enabled }}
+- name: CONVOY_HOST
+  value: {{ .Values.ingress.hostname | quote }}
+{{- end }}
 - name: CONVOY_DB_TYPE
   value: postgres
 - name: CONVOY_DB_DSN
@@ -222,6 +226,8 @@ Pod environments
   value: {{ .Values.auth.native | quote }}
 - name: CONVOY_JWT_REALM_ENABLED
   value: {{ .Values.auth.jwt | quote }}
+- name: CONVOY_SIGNUP_ENABLED
+  value: {{ .Values.auth.signup | quote }}
 {{- end }}
 
 

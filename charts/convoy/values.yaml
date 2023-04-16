@@ -9,6 +9,7 @@ convoy:
 auth:
   native: true
   jwt: true
+  signup: false
 
 # Convoy sends out emails for several reasons for dead endpoints, team invitation etc. It needs a SMTP provider to do this.
 smtp:
