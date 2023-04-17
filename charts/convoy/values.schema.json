@@ -1,0 +1,547 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "image": {
+            "type": "object",
+            "title": "Version",
+            "description": "Version of Convoy, should be carefully select it to make sure the upgrade doesn't breaking anything.",
+            "form": true,
+            "properties": {
+                "tag": {
+                    "type": "string",
+                    "title": "Version Tag",
+                    "description": "Tag of the docker image version of Convoy. Plese refer this page to get the desired tag https://github.com/frain-dev/convoy/releases ",
+                    "form": true
+                }
+            }
+        },
+        "ingress": {
+            "type": "object",
+            "form": true,
+            "title": "Ingress Configuration",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "form": true,
+                    "title": "Enable Public URL",
+                    "description": "Enable the ingress resource that allows you to access the convoy ui."
+                },
+                "hostname": {
+                    "type": "string",
+                    "title": "Public URL",
+                    "description": "This public URL where you can access the apps. Please make sure you have pointed your domain URL.",
+                    "form": true
+                },
+                "className": {
+                    "type": "string",
+                    "title": "Ingress Controller",
+                    "description": "Ingress controller provider e.g. nginx or traefik",
+                    "form": true,
+                    "hidden": {
+                        "value": false,
+                        "path": "ingress/enabled"
+                    }
+                },
+                "tls": {
+                    "type": "object",
+                    "form": true,
+                    "title": "SSL Configuration",
+                    "hidden": {
+                        "value": false,
+                        "path": "ingress/enabled"
+                    },
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "form": true,
+                            "title": "Generate SSL",
+                            "hidden": {
+                                "value": false,
+                                "path": "ingress/enabled"
+                            }
+                        },
+                        "issuer": {
+                            "type": "string",
+                            "form": true,
+                            "title": "Cluster-issuer name",
+                            "description": "Cert-manager SSL cluster-isuer name",
+                            "hidden": {
+                                "value": false,
+                                "path": "ingress/tls/enabled"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "auth": {
+            "type": "object",
+            "title": "Authentication Methods",
+            "form": true,
+            "properties": {
+                "signup": {
+                    "title": "Enable User Signup",
+                    "type": "boolean",
+                    "form": true
+                }
+            }
+        },
+        "smtp": {
+            "type": "object",
+            "title": "SMTP Configuration",
+            "form": true,
+            "properties": {
+                "provider": {
+                    "type": ["string", "null"],
+                    "title": "SMTP Server Provider",
+                    "description": "The provider for SMTP ( mailing ) operations. E.g., sengrid",
+                    "form": true
+                },
+                "url": {
+                    "type": ["string", "null"],
+                    "title": "SMTP Server URL",
+                    "description": "The SMTP provider URL. E.g., smtp.sendgrid.net",
+                    "form": true
+                },
+                "port": {
+                    "type": "integer",
+                    "title": "SMTP Server Port",
+                    "form": true
+                },
+                "username": {
+                    "type": ["string", "null"],
+                    "title": "SMTP Username",
+                    "description": "The SMTP username required to sign in to the provider.",
+                    "form": true
+                },
+                "password": {
+                    "type": ["string", "null"],
+                    "title": "SMTP Password",
+                    "description": "The SMTP password required to sign in to the provider.",
+                    "form": true
+                },
+                "from": {
+                    "type": ["string", "null"],
+                    "title": "Sender Address",
+                    "description": "THe SMTP address associated with the SMTP account and from which mails will be sent on behalf of. E.g., welcome@frain.dev",
+                    "form": true
+                },
+                "replyTo": {
+                    "type": ["string", "null"],
+                    "title": "ReplyTo Address",
+                    "description": "The SMPT address replies from mail will be directed to.",
+                    "form": true
+                }
+            }
+        },
+        "postgresql": {
+            "type": "object",
+            "title": "PostgreSQL Details",
+            "form": true,
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "title": "Use a new PostgreSQL database hosted in the cluster",
+                    "form": true,
+                    "description": "Whether to deploy a PostgreSQL server to satisfy the applications database requirements. To use an external database switch this off and configure the external database details"
+                },
+                "auth": {
+                    "type": "object",
+                    "title": "Database Authentication",
+                    "form": true,
+                    "hidden": {
+                        "value": false,
+                        "path": "postgresql/enabled"
+                    },
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "title": "Database Username",
+                            "description": "Name for a custom user to create.",
+                            "form": true,
+                            "hidden": {
+                                "value": false,
+                                "path": "postgresql/enabled"
+                            }
+                        },
+                        "password": {
+                            "type": ["string", "null"],
+                            "title": "Database Password",
+                            "description": "Password for the new user.",
+                            "form": true,
+                            "hidden": {
+                                "value": false,
+                                "path": "postgresql/enabled"
+                            }
+                        },
+                        "database": {
+                            "type": "string",
+                            "title": "Database Name",
+                            "description": "Name for a custom database to create.",
+                            "form": true,
+                            "hidden": {
+                                "value": false,
+                                "path": "postgresql/enabled"
+                            }
+                        }
+                    }
+                },
+                "primary": {
+                    "type": "object",
+                    "hidden": {
+                        "value": false,
+                        "path": "postgresql/enabled"
+                    },
+                    "properties": {
+                        "persistence": {
+                            "type": "object",
+                            "properties": {
+                                "size": {
+                                    "type": "string",
+                                    "title": "Volume Size",
+                                    "form": true,
+                                    "hidden": {
+                                        "value": false,
+                                        "path": "postgresql/enabled"
+                                    },
+                                    "render": "slider",
+                                    "sliderMin": 1,
+                                    "sliderMax": 100,
+                                    "sliderUnit": "Gi"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "externalDatabase": {
+            "type": "object",
+            "title": "External Database Details",
+            "description": "If PostgreSQL is disabled. Use this section to specify the external database details",
+            "form": true,
+            "properties": {
+                "host": {
+                    "type": ["string", "null"],
+                    "form": true,
+                    "title": "Database Host",
+                    "hidden": {
+                        "value": true,
+                        "path": "postgresql/enabled"
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "form": true,
+                    "title": "Database Port",
+                    "hidden": {
+                        "value": true,
+                        "path": "postgresql/enabled"
+                    }
+                },
+                "user": {
+                    "type": ["string", "null"],
+                    "form": true,
+                    "title": "Database Username",
+                    "hidden": {
+                        "value": true,
+                        "path": "postgresql/enabled"
+                    }
+                },
+                "password": {
+                    "type": ["string", "null"],
+                    "form": true,
+                    "title": "Database Password",
+                    "hidden": {
+                        "value": true,
+                        "path": "postgresql/enabled"
+                    }
+                },
+                "database": {
+                    "type": ["string", "null"],
+                    "form": true,
+                    "title": "Database Name",
+                    "hidden": {
+                        "value": true,
+                        "path": "postgresql/enabled"
+                    }
+                }
+            }
+        },
+        "redis": {
+            "type": "object",
+            "title": "Redis Details",
+            "form": true,
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "title": "Use a new Redis hosted in the cluster",
+                    "form": true,
+                    "description": "Whether to deploy a Redis server to satisfy the applications redis requirements. To use an external redis switch this off and configure the external redis details"
+                },
+                "auth": {
+                    "type": "object",
+                    "title": "Redis Authentication",
+                    "form": true,
+                    "hidden": {
+                        "value": false,
+                        "path": "redis/enabled"
+                    },
+                    "properties": {
+                        "password": {
+                            "type": ["string", "null"],
+                            "title": "Redis Password",
+                            "form": true,
+                            "hidden": {
+                                "value": false,
+                                "path": "redis/enabled"
+                            }
+                        }
+                    }
+                },
+                "master": {
+                    "type": "object",
+                    "hidden": {
+                        "value": false,
+                        "path": "redis/enabled"
+                    },
+                    "properties": {
+                        "persistence": {
+                            "type": "object",
+                            "properties": {
+                                "size": {
+                                    "type": "string",
+                                    "title": "Volume Size",
+                                    "form": true,
+                                    "hidden": {
+                                        "value": false,
+                                        "path": "redis/enabled"
+                                    },
+                                    "render": "slider",
+                                    "sliderMin": 1,
+                                    "sliderMax": 100,
+                                    "sliderUnit": "Gi"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "externalRedis": {
+            "type": "object",
+            "title": "External Redis Details",
+            "description": "If Redis is disabled. Use this section to specify the external Redis details",
+            "form": true,
+            "hidden": {
+                "value": true,
+                "path": "redis/enabled"
+            },
+            "properties": {
+                "host": {
+                    "type": ["string", "null"],
+                    "form": true,
+                    "title": "Redis Host",
+                    "hidden": {
+                        "value": true,
+                        "path": "redis/enabled"
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "form": true,
+                    "title": "Database Port",
+                    "hidden": {
+                        "value": true,
+                        "path": "redis/enabled"
+                    }
+                },
+                "password": {
+                    "type": ["string", "null"],
+                    "form": true,
+                    "title": "Redis Password",
+                    "hidden": {
+                        "value": true,
+                        "path": "redis/enabled"
+                    }
+                }
+            }
+        },
+        "resources": {
+            "type": "object",
+            "title": "Resources Definitions",
+            "description": "Configure resource size for convoy services.",
+            "form": true,
+            "properties": {
+                "server": {
+                    "type":"object",
+                    "title": "Webserver Resource",
+                    "description": "Resource request for convoy webserver",
+                    "form": true,
+                    "properties": {
+                        "requests": {
+                            "type": "object",
+                            "properties": {
+                                "memory": {
+                                    "type": "string",
+                                    "form": true,
+                                    "render": "slider",
+                                    "title": "Memory Request",
+                                    "sliderMin": 10,
+                                    "sliderMax": 2048,
+                                    "sliderUnit": "Mi"
+                                },
+                                "cpu": {
+                                    "type": "string",
+                                    "form": true,
+                                    "render": "slider",
+                                    "title": "CPU Request",
+                                    "sliderMin": 10,
+                                    "sliderMax": 2000,
+                                    "sliderUnit": "m"
+                                }
+                            }
+                        }
+                    }
+                },
+                "worker": {
+                    "type":"object",
+                    "title": "Worker Resource",
+                    "description": "Resource request for convoy worker",
+                    "form": true,
+                    "properties": {
+                        "requests": {
+                            "type": "object",
+                            "properties": {
+                                "memory": {
+                                    "type": "string",
+                                    "form": true,
+                                    "render": "slider",
+                                    "title": "Memory Request",
+                                    "sliderMin": 10,
+                                    "sliderMax": 2048,
+                                    "sliderUnit": "Mi"
+                                },
+                                "cpu": {
+                                    "type": "string",
+                                    "form": true,
+                                    "render": "slider",
+                                    "title": "CPU Request",
+                                    "sliderMin": 10,
+                                    "sliderMax": 2000,
+                                    "sliderUnit": "m"
+                                }
+                            }
+                        }
+                    }
+                },
+                "scheduler": {
+                    "type":"object",
+                    "title": "Scheduler Resource",
+                    "description": "Resource request for convoy scheduler",
+                    "form": true,
+                    "properties": {
+                        "requests": {
+                            "type": "object",
+                            "properties": {
+                                "memory": {
+                                    "type": "string",
+                                    "form": true,
+                                    "render": "slider",
+                                    "title": "Memory Request",
+                                    "sliderMin": 10,
+                                    "sliderMax": 2048,
+                                    "sliderUnit": "Mi"
+                                },
+                                "cpu": {
+                                    "type": "string",
+                                    "form": true,
+                                    "render": "slider",
+                                    "title": "CPU Request",
+                                    "sliderMin": 10,
+                                    "sliderMax": 2000,
+                                    "sliderUnit": "m"
+                                }
+                            }
+                        }
+                    }
+                },
+                "ingest": {
+                    "type":"object",
+                    "title": "Ingest Resource",
+                    "description": "Resource request for convoy ingester",
+                    "form": true,
+                    "properties": {
+                        "requests": {
+                            "type": "object",
+                            "properties": {
+                                "memory": {
+                                    "type": "string",
+                                    "form": true,
+                                    "render": "slider",
+                                    "title": "Memory Request",
+                                    "sliderMin": 10,
+                                    "sliderMax": 2048,
+                                    "sliderUnit": "Mi"
+                                },
+                                "cpu": {
+                                    "type": "string",
+                                    "form": true,
+                                    "render": "slider",
+                                    "title": "CPU Request",
+                                    "sliderMin": 10,
+                                    "sliderMax": 2000,
+                                    "sliderUnit": "m"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "autoscaling": {
+            "title": "Autoscaling Configuration",
+            "description": "Scaling configuration using Horizontal Pod Autoscaler mechanism. Read more: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/",
+            "type": "object",
+            "form": true,
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "title": "Enable Autoscaling",
+                    "form": true
+                },
+                "minReplicas": {
+                    "type": "integer",
+                    "title": "Minimum Replica",
+                    "description": "Minimum replica number of convoy instance, should be > 0.",
+                    "form": true,
+                    "hidden": {
+                        "value": false,
+                        "path": "autoscaling/enabled"
+                    }
+                },
+                "maxReplicas": {
+                    "type": "integer",
+                    "title": "Maximum Replica",
+                    "description": "Maximum replica number of convoy instance.",
+                    "form": true,
+                    "hidden": {
+                        "value": false,
+                        "path": "autoscaling/enabled"
+                    }
+                },
+                "targetCPUUtilizationPercentage": {
+                    "type": "integer",
+                    "title": "Target CPU Utilization",
+                    "description": "The percentage number of target average CPU utilization.",
+                    "form": true,
+                    "hidden": {
+                        "value": false,
+                        "path": "autoscaling/enabled"
+                    }
+                }
+            }
+        }
+    }
+}

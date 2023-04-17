@@ -13,7 +13,7 @@ auth:
 
 # Convoy sends out emails for several reasons for dead endpoints, team invitation etc. It needs a SMTP provider to do this.
 smtp:
-  provider:  # e.g. sendgrid or google
+  provider: sendgrid # e.g. sendgrid or google
   url:
   port: 587
   username: ""
