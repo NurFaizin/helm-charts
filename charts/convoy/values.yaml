@@ -27,7 +27,7 @@ image:
   repository: docker.cloudsmith.io/convoy/convoy/frain-dev/convoy
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "0.9.2"
 
 imagePullSecrets: []
 nameOverride: ""
