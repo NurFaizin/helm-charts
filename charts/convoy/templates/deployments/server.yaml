@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels:
       {{- include "convoy.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/type: server
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,6 +20,7 @@ spec:
       {{- end }}
       labels:
         {{- include "convoy.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/type: server
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -46,17 +48,17 @@ spec:
             mountPath: /convoy.json
             subPath: convoy.json
           ports:
-            - name: http
+            - name: http-server
               containerPort: 5005
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /health
-              port: http
+              port: http-server
           readinessProbe:
             httpGet:
               path: /health
-              port: http
+              port: http-server
           resources:
             requests:
             {{- toYaml .Values.resources.server.requests | nindent 14 }}

@@ -9,6 +9,7 @@ spec:
   selector:
     matchLabels:
       {{- include "convoy.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/type: ingest
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -17,6 +18,7 @@ spec:
       {{- end }}
       labels:
         {{- include "convoy.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/type: ingest
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -45,7 +47,7 @@ spec:
             mountPath: /convoy.json
             subPath: convoy.json
           ports:
-            - name: http
+            - name: http-ingest
               containerPort: 5007
               protocol: TCP
           livenessProbe:
