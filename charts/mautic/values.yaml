@@ -1,0 +1,301 @@
+# Default values for mautic.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+admin:
+  firstname: "Super"
+  lastname: "Admin"
+  username: "admin"
+  password: ""
+  email: ""
+
+system:
+  timezone: "UTC"
+
+queue:
+  enabled: true
+
+cache:
+  enabled: true
+
+cronjobs:
+  - name: segments-update
+    schedule: "8,23,38,52 * * * *"
+    command: "php /var/www/html/bin/console mautic:segments:update"
+    allowConcurrency: false
+  - name: import
+    schedule: "*/5 * * * *"
+    command: "php /var/www/html/bin/console mautic:import"
+    allowConcurrency: false
+  - name: campaigns-rebuild
+    schedule: "5,20,35,50 * * * *"
+    command: "php /var/www/html/bin/console mautic:campaigns:rebuild"
+    allowConcurrency: false
+  - name: campaigns-trigger
+    schedule: "2,17,32,47 * * * *"
+    command: "php /var/www/html/bin/console mautic:campaigns:trigger"
+    allowConcurrency: false
+  - name: messages-send
+    schedule: "0,15,30,45 * * * *"
+    command: "php /var/www/html/bin/console mautic:messages:send"
+    allowConcurrency: false
+  - name: emails-send
+    schedule: "0,15,30,45 * * * *"
+    command: "php /var/www/html/bin/console mautic:emails:send"
+    allowConcurrency: false
+  - name: email-fetch
+    schedule: "0,15,30,45 * * * *"
+    command: "php /var/www/html/bin/console mautic:email:fetch"
+    allowConcurrency: false
+  - name: social-monitoring
+    schedule: "0,15,30,45 * * * *"
+    command: "php /var/www/html/bin/console mautic:social:monitoring"
+    allowConcurrency: false
+  - name: webhooks-process
+    schedule: "0,15,30,45 * * * *"
+    command: "php /var/www/html/bin/console mautic:webhooks:process"
+    allowConcurrency: false
+  - name: broadcasts-send
+    schedule: "0,15,30,45 * * * *"
+    command: "php /var/www/html/bin/console mautic:broadcasts:send"
+    allowConcurrency: false
+  - name: maintenance-cleanup
+    schedule: "* 1 * * *"
+    command: "php /var/www/html/bin/console mautic:maintenance:cleanup --days-old=365"
+    allowConcurrency: false
+  - name: iplookup-download
+    schedule: "0 4 15 * *"
+    command: "php /var/www/html/bin/console mautic:iplookup:download"
+    allowConcurrency: false
+  - name: reports-scheduler
+    schedule: "*/5 * * * *"
+    command: "php /var/www/html/bin/console mautic:reports:scheduler"
+    allowConcurrency: false
+  - name: unusedip-delete
+    schedule: "0 5 10 * *"
+    command: "php /var/www/html/bin/console mautic:unusedip:delete"
+    allowConcurrency: false
+
+replicaCount: 1
+
+image:
+  repository: mautic/mautic
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v4"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  
+# Set additional environment variables on the Deployment
+extraEnv: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations: {}
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hostname: yourdomain.here
+  tls:
+    enabled: false
+    issuer: "letsencrypt-prod" # cert-manager cluster-issuer name
+  
+  # define a custom incressClassName, like "traefik" or "nginx"
+  className: "nginx"
+
+## Persistence Parameters
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  ##
+  enabled: true
+  ## @param persistence.storageClass Persistent Volume storage class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+  ##
+  storageClass: "nfs"
+  ## @param persistence.accessModes [array] Persistent Volume access modes
+  ##
+  accessModes:
+    - ReadWriteMany
+  ## @param persistence.accessMode Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)
+  ##
+  accessMode: ReadWriteMany
+  ## @param persistence.size Persistent Volume size
+  ##
+  size: 10Gi
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
+  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+  ##
+  existingClaim: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+## Bitnami MariaDB configuration
+## https://github.com/bitnami/charts/tree/master/bitnami/mariadb
+##
+mariadb:
+  ## @param mariadb.enabled Deploy a MariaDB server to satisfy the applications database requirements
+  ## To use an external database set this to false and configure the `externalDatabase.*` parameters
+  ##
+  enabled: true
+  ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
+  ##
+  architecture: standalone
+  ## MariaDB Authentication parameters
+  ## @param mariadb.auth.rootPassword MariaDB root password
+  ## @param mariadb.auth.database MariaDB custom database
+  ## @param mariadb.auth.username MariaDB custom user name
+  ## @param mariadb.auth.password MariaDB custom user password
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
+  ##
+  auth:
+    rootPassword: ""
+    database: mautic
+    username: mautic
+    password: ""
+    existingSecret:
+  ## MariaDB Primary configuration
+  ##
+  primary:
+    ## MariaDB Primary Persistence parameters
+    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## @param mariadb.primary.persistence.enabled Enable persistence on MariaDB using PVC(s)
+    ## @param mariadb.primary.persistence.storageClass Persistent Volume storage class
+    ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes
+    ## @param mariadb.primary.persistence.size Persistent Volume size
+    ##
+    persistence:
+      enabled: true
+      storageClass:
+      existingClaim:
+      accessModes:
+        - ReadWriteOnce
+      size: 10Gi
+
+## External Database Configuration
+## All of these values are only used if `mariadb.enabled=false`
+##
+externalDatabase:
+  ## @param externalDatabase.host External Database server host
+  ##
+  host:
+  ## @param externalDatabase.port External Database server port
+  ##
+  port: 3306
+  ## @param externalDatabase.user External Database username
+  ##
+  user:
+  ## @param externalDatabase.password External Database user password
+  ##
+  password: ""
+  ## @param externalDatabase.database External Database database name
+  ##
+  database:
+  ## @param externalDatabase.existingSecret The name of an existing secret with database credentials. Evaluated as a template
+  ## NOTE: Must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  ##
+  existingSecret:
+
+beanstalkd:
+  enabled: true
+  persistence:
+    enabled: true
+    storageClass:
+    existingClaim:
+    accessModes:
+      - ReadWriteOnce
+    size: 3Gi
+
+externalBeanstalkd:
+  host:
+  port: 11300
+
+## Bitnami Redis configuration
+## https://github.com/bitnami/charts/tree/master/bitnami/redis
+redis:
+  enabled: false
+  architecture: standalone
+  auth:
+    enabled: true
+    password: ""
+    existingSecret:
+  master:
+    persistence:
+      enabled: true
+      existingClaim:
+      size: 3Gi  
+
+externalRedis:
+  host:
+  port: 6379
+  password: ""
+  existingSecret:

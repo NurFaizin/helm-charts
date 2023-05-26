@@ -1,0 +1,15 @@
+dependencies:
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  version: 2.4.0
+- name: mariadb
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.5.1
+- name: beanstalkd
+  repository: file://../beanstalkd
+  version: 1.13.0-20230514
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.2.0
+digest: sha256:bb06cc47d8246af9298c5a992e76e6c1f9721d65ac3c7ea7759e4b8eac08e8bb
+generated: "2023-05-21T15:22:25.8061671+07:00"

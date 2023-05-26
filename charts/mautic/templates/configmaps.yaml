@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mautic.fullname" . }}
+  labels:
+    {{ include "mautic.labels" . | nindent 4 }}
+data:
+  php.ini: |
+    date.timezone = "${PHP_INI_DATE_TIMEZONE}"
+    always_populate_raw_post_data = -1
+    zend.assertions = -1
+    memory_limit = ${PHP_MEMORY_LIMIT}
+    file_uploads = On
+    upload_max_filesize = ${PHP_MAX_UPLOAD}
+    post_max_size = ${PHP_MAX_UPLOAD}
+    max_execution_time = ${PHP_MAX_EXECUTION_TIME}
+  {{- if $.Values.cache.enabled }}
+    session.save_handler = redis
+    session.save_path = "tcp://${REDIS_HOST}:${REDIS_PORT}?auth=${REDIS_PASSWORD}"
+  {{- end }}
+
+  mautic-queue-process.sh: |
+    #!/bin/bash
+
+    echo 'Starting worker...'
+
+    # Process email hit
+    echo 'mautic:queue:process -i email_hit started'
+    php /var/www/html/bin/console mautic:queue:process -i email_hit &
+
+    # Process page hit
+    echo 'mautic:queue:process -i page_hit started'
+    php /var/www/html/bin/console mautic:queue:process -i page_hit &
+
+    # Process transport webhook
+    echo 'mautic:queue:process -i transport_webhook started'
+    php /var/www/html/bin/console mautic:queue:process -i transport_webhook &
+
+    # Wait for any process to exit
+    wait -n
+
+    # Exit with status of process that exited first
+    exit $?

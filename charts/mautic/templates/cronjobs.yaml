@@ -1,0 +1,43 @@
+{{- range .Values.cronjobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "{{- include "mautic.fullname" $ }}-{{ .name }}"
+  labels:
+    {{- include "mautic.labels" $ | nindent 4 }}
+spec:
+  schedule: {{ .schedule | quote }}
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 5
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          volumes:
+            - name: mautic-data
+              {{- if $.Values.persistence.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ $.Values.persistence.existingClaim | default (include "common.names.fullname" $) }}
+              {{- else }}
+              emptyDir: {}
+              {{- end }}
+          containers:
+            - name: {{ $.Chart.Name }}               
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              command:
+              {{- range ( split " " .command ) }}
+                - {{ . }}
+              {{- end }}
+              volumeMounts:
+                - mountPath: /var/www/html
+                  name: mautic-data
+              env:
+                {{- include "mautic.deploymentPodEnvironments" $ | nindent 16 }}
+{{- end }}
