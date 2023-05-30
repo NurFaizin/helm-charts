@@ -16,7 +16,7 @@ queue:
   enabled: true
 
 cache:
-  enabled: true
+  enabled: false
 
 cronjobs:
   - name: segments-update

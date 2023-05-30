@@ -97,13 +97,6 @@ spec:
             items:
               - key: php.ini
                 path: php.ini
-        - name: filebrowser-data
-          {{- if .Values.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ include "common.names.fullname" . }}-filebrowser
-          {{- else }}
-          emptyDir: {}
-          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
