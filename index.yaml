@@ -1,5 +1,33 @@
 apiVersion: v1
 entries:
+  beanstalkd:
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.13.0
+    created: "2023-05-30T15:15:10.104333497Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 2.x.x
+    description: A Helm chart for Beanstalk, a simple, fast work queue.
+    digest: cbf3805cf849bd0cf1fd4806d46d9fdbea44ff7ec7a219c4c4b3deb679e172c9
+    home: https://github.com/NurFaizin/helm-charts/beanstalkd
+    icon: https://bitnami.com/assets/stacks/memcached/img/memcached-stack-220x234.png
+    keywords:
+    - beanstalkd
+    - cache
+    maintainers:
+    - name: Nur Faizin
+    name: beanstalkd
+    sources:
+    - https://github.com/beanstalkd/beanstalkd
+    - https://beanstalkd.github.io
+    type: application
+    urls:
+    - https://github.com/NurFaizin/helm-charts/releases/download/beanstalkd-1.13.0-20230514/beanstalkd-1.13.0-20230514.tgz
+    version: 1.13.0-20230514
   convoy:
   - annotations:
       category: Application Server
@@ -334,4 +362,4 @@ entries:
     urls:
     - https://github.com/NurFaizin/helm-charts/releases/download/wordpress-scalable-6.1.1-20230315/wordpress-scalable-6.1.1-20230315.tgz
     version: 6.1.1-20230315
-generated: "2023-04-18T09:03:06.124296921Z"
+generated: "2023-05-30T15:15:10.104354797Z"
