@@ -149,6 +149,12 @@ Pod environments
   value: {{ .Values.system.timezone | quote }}
 {{- end }}
 
+{{/* Define filebrowser password */}}
+{{- define "mautic.filebrowser.password" -}}
+{{- $creds := htpasswd "admin" .Values.persistence.filebrowser.password -}}
+{{- printf "%s" (splitList ":" $creds | last) -}}
+{{- end -}}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).

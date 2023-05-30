@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels:
       {{- include "mautic.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mautic
   template:
     metadata:
       annotations:
@@ -20,6 +21,7 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configmaps.yaml") . | sha256sum }}
       labels:
         {{- include "mautic.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: mautic
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -58,6 +60,29 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             {{- include "mautic.deploymentPodEnvironments" . | nindent 12 }}
+        {{- if and .Values.persistence.enabled .Values.persistence.filebrowser.enabled }}
+        - name: filebrowser
+          image: filebrowser/filebrowser
+          ports:
+            - name: filebrowser
+              containerPort: 8000
+          volumeMounts:
+            - name: mautic-data
+              mountPath: /srv
+          resources:
+            requests:
+              cpu: 1m
+              memory: 10Mi
+          env:
+            - name: FB_BASEURL
+              value: {{ .Values.persistence.filebrowser.baseUrl }}
+            - name: FB_PORT
+              value: "8000"
+            - name: FB_USERNAME
+              value: {{ .Values.persistence.filebrowser.username }}
+            - name: FB_PASSWORD
+              value: {{ include "mautic.filebrowser.password" . }}
+        {{- end }}
       volumes:
         - name: mautic-data
           {{- if .Values.persistence.enabled }}
@@ -72,6 +97,13 @@ spec:
             items:
               - key: php.ini
                 path: php.ini
+        - name: filebrowser-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "common.names.fullname" . }}-filebrowser
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

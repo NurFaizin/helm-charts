@@ -170,6 +170,15 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
+  ## @param persistence.filebrowser.enabled Enable persitent volume filebrowser
+  ## @param persistence.filebrowser.baseUrl Filebrowser baseurl
+  ## @param persistence.filebrowser.port Filebrowser port to listen
+  ##
+  filebrowser:
+    enabled: false
+    baseUrl: /filebrowser
+    username: admin
+    password: admin
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
