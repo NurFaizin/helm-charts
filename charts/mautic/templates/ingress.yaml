@@ -18,8 +18,11 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "mautic.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+  {{- if .Values.ingress.tls.issuer }}
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.tls.issuer }}
+  {{- end }}
+  {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
