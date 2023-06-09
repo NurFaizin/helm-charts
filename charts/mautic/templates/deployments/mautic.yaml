@@ -30,6 +30,23 @@ spec:
       serviceAccountName: {{ include "mautic.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: {{ .Chart.Name }}-install
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ['echo', '"The mautic server is ready"']
+          volumeMounts:
+            - mountPath: /usr/local/etc/php/php.ini
+              subPath: php.ini
+              name: php-ini
+            - mountPath: /var/www/html
+              name: mautic-data
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            {{- include "mautic.deploymentPodEnvironments" . | nindent 12 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -43,11 +60,11 @@ spec:
           livenessProbe:
             tcpSocket:
               port: http
-            initialDelaySeconds: 90
+            initialDelaySeconds: 10
           readinessProbe:
             tcpSocket:
               port: http
-            initialDelaySeconds: 90
+            initialDelaySeconds: 10
           volumeMounts:
             - mountPath: /usr/local/etc/php/php.ini
               subPath: php.ini
