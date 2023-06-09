@@ -67,46 +67,6 @@ entries:
     urls:
     - https://github.com/NurFaizin/helm-charts/releases/download/convoy-0.9.2-20230418/convoy-0.9.2-20230418.tgz
     version: 0.9.2-20230418
-  mautic:
-  - apiVersion: v2
-    appVersion: v4
-    created: "2023-06-09T01:15:01.829837054Z"
-    dependencies:
-    - name: common
-      repository: https://charts.bitnami.com/bitnami
-      version: 2.x.x
-    - condition: mariadb.enabled
-      name: mariadb
-      repository: https://charts.bitnami.com/bitnami
-      version: 11.5.1
-    - condition: beanstalkd.enabled
-      name: beanstalkd
-      repository: https://nurfaizin.github.io/helm-charts
-      version: 1.x.x-x
-    - condition: redis.enabled
-      name: redis
-      repository: https://charts.bitnami.com/bitnami
-      version: 17.2.0
-    description: A Helm chart for Mautic, an open source marketing automation platform
-      that provides you with the greatest level of audience intelligence, thus enabling
-      you to make more meaningful customer connections.
-    digest: e5cf09cad3b20002bb9c63acd44d219320a401c340fea9700bb0ae7c85f20b6d
-    home: https://github.com/NurFaizin/helm-charts/mautic
-    icon: https://avatars.githubusercontent.com/u/5257677?s=200&v=4
-    keywords:
-    - Automation
-    - CRM
-    - Marketing
-    maintainers:
-    - name: Nur Faizin
-    name: mautic
-    sources:
-    - https://github.com/mautic/mautic
-    - https://docs.mautic.org
-    type: application
-    urls:
-    - https://github.com/NurFaizin/helm-charts/releases/download/mautic-4.4.8-20230609/mautic-4.4.8-20230609.tgz
-    version: 4.4.8-20230609
   n8n:
   - annotations:
       category: Work Flow
