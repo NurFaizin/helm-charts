@@ -34,7 +34,7 @@ spec:
         - name: wait-for-mautic
           image: eficode/wait-for
           command: ["/bin/sh"]
-          args: ["-c", './wait-for http://{{ include "mautic.fullname" . }}:{{ .Values.service.port }}/ -- echo "The mautic server is ready"']
+          args: ["-c", './wait-for --timeout=0 {{ include "mautic.fullname" . }}:{{ .Values.service.port }} -- echo "The mautic server is ready"']
       containers:
         - name: {{ .Chart.Name }}-queue-process
           securityContext:
